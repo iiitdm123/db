@@ -1,0 +1,653 @@
+1
+
+mysql> set @RowNum = 0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from (select (@RowNum:=@RowNum+1) as row ,Fname from Employee , (select @RowNum:=0)t)r where row%2=1;
++------+-------------+
+| row  | Fname       |
++------+-------------+
+|    1 | Abdul       |
+|    3 | Rahul       |
+|    5 | Karthikeyan |
+|    7 | Rajesh      |
+|    9 | Aditi       |
++------+-------------+
+5 rows in set (0.00 sec)
+
+2
+
+mysql> set @RowNum = 0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from (select (@RowNum:=@RowNum+1) as row ,Fname from Employee , (select @RowNum:=0)t)r where row%2=0;
++------+----------+
+| row  | Fname    |
++------+----------+
+|    2 | Lakshmi  |
+|    4 | Paul     |
+|    6 | Andrew   |
+|    8 | Himanshu |
+|   10 | Aditya   |
++------+----------+
+5 rows in set (0.00 sec)
+
+3
+
+mysql> select year("1998-05-17");
++--------------------+
+| year("1998-05-17") |
++--------------------+
+|               1998 |
++--------------------+
+1 row in set (0.00 sec)
+
+4
+
+mysql> select year(date1) from (select convert(date,date) date1 from dateVarchar)table1;
++-------------+
+| year(date1) |
++-------------+
+|        1998 |
++-------------+
+1 row in set (0.00 sec)
+
+5
+
+mysql> select substring(Fname,1,3) from Employee;
++----------------------+
+| substring(Fname,1,3) |
++----------------------+
+| Abd                  |
+| Lak                  |
+| Rah                  |
+| Pau                  |
+| Kar                  |
+| And                  |
+| Raj                  |
+| Him                  |
+| Adi                  |
+| Adi                  |
++----------------------+
+10 rows in set (0.00 sec)
+
+6
+
+mysql> select date from dateVarchar where STR_TO_DATE(date,"%d,%m,%y") is not null;
+Empty set, 1 warning (0.00 sec)
+
+7
+
+mysql> select Fname , Dno , DOB  from Duplicates group by Fname , Dno , DOB having count(*) > 1;
++---------+------+------------+
+| Fname   | Dno  | DOB        |
++---------+------+------------+
+| Karthik |    1 | 1998-05-17 |
+| Kenneth |    2 | 1999-02-07 |
++---------+------+------------+
+2 rows in set (0.00 sec)
+
+8
+
+9
+
+10
+
+mysql> select salary from (select distinct salary from Employee order by Salary desc limit 3)emp order by salary asc limit 1;
++----------+
+| salary   |
++----------+
+| 40000.00 |
++----------+
+1 row in set (0.00 sec)
+
+11
+
+mysql> select distinct salary from Employee order by Salary desc limit 3;
++----------+
+| salary   |
++----------+
+| 60000.00 |
+| 50000.00 |
+| 40000.00 |
++----------+
+3 rows in set (0.00 sec)
+
+12
+
+mysql> SELECT table_schema AS "Database", SUM(data_length + index_length) / 1024 / 1024 AS "Size (MB)" FROM information_schema.TABLES GROUP BY table_schema;
++--------------------+------------+
+| Database           | Size (MB)  |
++--------------------+------------+
+| EMPLOYEE           | 0.35937500 |
+| Flight             | 0.06250000 |
+| IIITDM             | 0.07812500 |
+| information_schema | 0.00878906 |
+| mysql              | 0.68253326 |
+| performance_schema | 0.00000000 |
+| student            | 0.07812500 |
+| temp               | 0.03125000 |
+| University         | 0.29687500 |
++--------------------+------------+
+9 rows in set (0.02 sec)
+
+13
+
+mysql> select year(Bdate) , month(Bdate) , day(Bdate) from Employee;
++-------------+--------------+------------+
+| year(Bdate) | month(Bdate) | day(Bdate) |
++-------------+--------------+------------+
+|        1931 |           10 |         15 |
+|        1996 |            4 |         14 |
+|        1997 |            6 |         12 |
+|        1998 |            3 |         15 |
+|        1998 |            5 |         17 |
+|        1998 |            1 |         19 |
+|        1998 |            5 |         12 |
+|        1998 |            8 |          9 |
+|        1998 |            4 |          5 |
+|        1998 |            8 |         12 |
++-------------+--------------+------------+
+10 rows in set (0.00 sec)
+
+14
+
+mysql> select now();
++---------------------+
+| now()               |
++---------------------+
+| 2018-03-30 08:46:13 |
++---------------------+
+1 row in set (0.00 sec)
+
+15
+
+mysql> select date(now());
++-------------+
+| date(now()) |
++-------------+
+| 2018-03-30  |
++-------------+
+1 row in set (0.00 sec)
+
+16
+
+mysql> select DATE_ADD("2017-04-09", INTERVAL 1 DAY) AS NEXTDAY;
++------------+
+| NEXTDAY    |
++------------+
+| 2017-04-10 |
++------------+
+1 row in set (0.00 sec)
+
+17
+
+mysql> select position("a" in "Sundar Pichai");
++----------------------------------+
+| position("a" in "Sundar Pichai") |
++----------------------------------+
+|                                5 |
++----------------------------------+
+1 row in set (0.00 sec)
+
+18
+
+mysql> select trim(Fname) from Employee;
++-------------+
+| trim(Fname) |
++-------------+
+| Abdul       |
+| Lakshmi     |
+| Rahul       |
+| Paul        |
+| Karthikeyan |
+| Andrew      |
+| Rajesh      |
+| Himanshu    |
+| Aditi       |
+| Aditya      |
++-------------+
+10 rows in set (0.00 sec)
+
+19
+
+mysql> select fname , length(fname) from Employee;
++-------------+---------------+
+| fname       | length(fname) |
++-------------+---------------+
+| Abdul       |             5 |
+| Lakshmi     |             7 |
+| Rahul       |             5 |
+| Paul        |             4 |
+| Karthikeyan |            11 |
+| Andrew      |             6 |
+| Rajesh      |             6 |
+| Himanshu    |             8 |
+| Aditi       |             5 |
+| Aditya      |             6 |
++-------------+---------------+
+10 rows in set (0.01 sec)
+
+20
+
+mysql> select replace (Fname, "i","*") from Employee;
++--------------------------+
+| replace (Fname, "i","*") |
++--------------------------+
+| Abdul                    |
+| Lakshm*                  |
+| Rahul                    |
+| Paul                     |
+| Karth*keyan              |
+| Andrew                   |
+| Rajesh                   |
+| H*manshu                 |
+| Ad*t*                    |
+| Ad*tya                   |
++--------------------------+
+10 rows in set (0.00 sec)
+
+21
+
+mysql> select concat(Fname,"_",Lname) from Employee;
++--------------------------+
+| concat(Fname,"_",Lname)  |
++--------------------------+
+| Abdul_Kalam              |
+| Lakshmi_Sivaramakrishna  |
+| Rahul_Singh              |
+| Paul_Jacob               |
+| Karthikeyan_Selvakumaran |
+| Andrew_Silberschatz      |
+| Rajesh_Khanna            |
+| Himanshu_Giri            |
+| Aditi_Kumar              |
+| Aditya_Chopra            |
++--------------------------+
+10 rows in set (0.00 sec)
+
+22
+
+mysql> select * from Employee where Fname like ("Kar%") or Fname like ("kar%") or Fname like ("KAR%") or Fname like ("%Kar%") or Fname like ("%kar%") or Fname like ("%KAR%") or Fname like ("%Kar") or Fname like ("%kar") or Fname like ("%KAR");
++-------------+-------+--------------+---------+------------+--------------------+------+----------+-----------+-----+
+| Fname       | Minit | Lname        | Ssn     | Bdate      | Address            | Sex  | Salary   | Super_ssn | Dno |
++-------------+-------+--------------+---------+------------+--------------------+------+----------+-----------+-----+
+| Karthikeyan |       | Selvakumaran | 5261423 | 1998-05-17 | Adambakkam,Chennai | M    | 60000.00 | 5261423   |   1 |
++-------------+-------+--------------+---------+------------+--------------------+------+----------+-----------+-----+
+1 row in set (0.01 sec)
+
+23
+
+mysql> select sex ,count(*) from Employee where Bdate between "1980-01-05" and "2016-12-31" group by Sex;
++------+----------+
+| sex  | count(*) |
++------+----------+
+| F    |        2 |
+| M    |        7 |
++------+----------+
+2 rows in set (0.00 sec)
+
+24
+
+mysql> select user,password from mysql.user;
++------------------+-------------------------------------------+
+| user             | password                                  |
++------------------+-------------------------------------------+
+| root             | *FF21E905DCD4F4DE4B1A1A07BEFD12C24FCC9D40 |
+| root             | *FF21E905DCD4F4DE4B1A1A07BEFD12C24FCC9D40 |
+| root             | *FF21E905DCD4F4DE4B1A1A07BEFD12C24FCC9D40 |
+| debian-sys-maint | *E84EE14DAE3E443765EB100511B6E0158216EE64 |
++------------------+-------------------------------------------+
+4 rows in set (0.00 sec)
+
+25
+
+mysql> select * from Employee where Fname <>"" and Minit <>"" and  Lname <>"";
++---------+-------+-----------------+---------+------------+--------------+------+----------+-----------+-----+
+| Fname   | Minit | Lname           | Ssn     | Bdate      | Address      | Sex  | Salary   | Super_ssn | Dno |
++---------+-------+-----------------+---------+------------+--------------+------+----------+-----------+-----+
+| Lakshmi | O     | Sivaramakrishna | 2345678 | 1996-04-14 | Kochi,Kerala | F    | 40000.00 | 1234567   |   5 |
+| Rahul   | K     | Singh           | 3456789 | 1997-06-12 | Chandigarh   | M    | 35000.00 | 5261423   |   2 |
+| Paul    | K     | Jacob           | 4567890 | 1998-03-15 | Pondichery   | M    | 30000.00 | 3456789   |   2 |
+| Andrew  | E     | Silberschatz    | 5678901 | 1998-01-19 | Germany      | M    | 40000.00 | 5261423   |   3 |
+| Rajesh  | L     | Khanna          | 6789012 | 1998-05-12 | Mumbai       | M    | 35000.00 | 5678901   |   3 |
+| Aditi   | M     | Kumar           | 8901234 | 1998-04-05 | Mumbai       | F    | 30000.00 | 7890123   |   4 |
+| Aditya  | V     | Chopra          | 9012345 | 1998-08-12 | Kolkata      | M    | 25000.00 | 2345678   |   5 |
++---------+-------+-----------------+---------+------------+--------------+------+----------+-----------+-----+
+7 rows in set (0.00 sec)
+
+26
+
+mysql> select * from Employee where Fname like ("____l");
++-------+-------+-------+---------+------------+------------+------+----------+-----------+-----+
+| Fname | Minit | Lname | Ssn     | Bdate      | Address    | Sex  | Salary   | Super_ssn | Dno |
++-------+-------+-------+---------+------------+------------+------+----------+-----------+-----+
+| Abdul |       | Kalam | 1234567 | 1931-10-15 | Rameswaram | M    | 50000.00 | 1234567   |   1 |
+| Rahul | K     | Singh | 3456789 | 1997-06-12 | Chandigarh | M    | 35000.00 | 5261423   |   2 |
++-------+-------+-------+---------+------------+------------+------+----------+-----------+-----+
+2 rows in set (0.00 sec)
+
+27
+
+mysql> select * from Employee where month(Bdate) = 1;
++--------+-------+--------------+---------+------------+---------+------+----------+-----------+-----+
+| Fname  | Minit | Lname        | Ssn     | Bdate      | Address | Sex  | Salary   | Super_ssn | Dno |
++--------+-------+--------------+---------+------------+---------+------+----------+-----------+-----+
+| Andrew | E     | Silberschatz | 5678901 | 1998-01-19 | Germany | M    | 40000.00 | 5261423   |   3 |
++--------+-------+--------------+---------+------------+---------+------+----------+-----------+-----+
+1 row in set (0.00 sec)
+
+28
+
+mysql> select table_schema , create_time from information_schema.tables group by table_schema;
++--------------------+---------------------+
+| table_schema       | create_time         |
++--------------------+---------------------+
+| EMPLOYEE           | 2018-03-05 19:27:02 |
+| Flight             | 2018-03-05 19:27:02 |
+| IIITDM             | 2018-03-05 19:27:02 |
+| information_schema | 2018-04-03 14:38:34 |
+| mysql              | 2018-03-05 19:27:12 |
+| performance_schema | NULL                |
+| student            | 2018-03-05 19:27:02 |
+| temp               | 2018-03-30 08:18:10 |
+| University         | 2018-03-05 19:27:02 |
++--------------------+---------------------+
+9 rows in set (0.02 sec)
+
+29
+
+mysql> select * from (select * from Employee where Fname like "A%")A natural join (select * from Employee where Fname like "Ab%")B;
++-------+-------+-------+---------+------------+------------+------+----------+-----------+-----+
+| Fname | Minit | Lname | Ssn     | Bdate      | Address    | Sex  | Salary   | Super_ssn | Dno |
++-------+-------+-------+---------+------------+------------+------+----------+-----------+-----+
+| Abdul |       | Kalam | 1234567 | 1931-10-15 | Rameswaram | M    | 50000.00 | 1234567   |   1 |
++-------+-------+-------+---------+------------+------------+------+----------+-----------+-----+
+1 row in set (0.00 sec)
+
+30
+
+mysql> select Fname , Minit , Lname from Employee where Lname like ("*%") or Lname like ("%*%") or Lname like ("%*");
+Empty set (0.00 sec)
+
+31
+
+32
+
+mysql> select count(*) from Employee where month(Bdate)=5 and year(Bdate)=1998;
++----------+
+| count(*) |
++----------+
+|        2 |
++----------+
+1 row in set (0.00 sec)
+
+33
+
+34
+
+mysql> select lower(Fname) , upper(Fname) from Employee;
++--------------+--------------+
+| lower(Fname) | upper(Fname) |
++--------------+--------------+
+| abdul        | ABDUL        |
+| lakshmi      | LAKSHMI      |
+| rahul        | RAHUL        |
+| paul         | PAUL         |
+| karthikeyan  | KARTHIKEYAN  |
+| andrew       | ANDREW       |
+| rajesh       | RAJESH       |
+| himanshu     | HIMANSHU     |
+| aditi        | ADITI        |
+| aditya       | ADITYA       |
++--------------+--------------+
+10 rows in set (0.00 sec)
+
+35
+
+mysql> select * from Employee limit 5;
++-------------+-------+-----------------+---------+------------+--------------------+------+----------+-----------+-----+
+| Fname       | Minit | Lname           | Ssn     | Bdate      | Address            | Sex  | Salary   | Super_ssn | Dno |
++-------------+-------+-----------------+---------+------------+--------------------+------+----------+-----------+-----+
+| Abdul       |       | Kalam           | 1234567 | 1931-10-15 | Rameswaram         | M    | 50000.00 | 1234567   |   1 |
+| Lakshmi     | O     | Sivaramakrishna | 2345678 | 1996-04-14 | Kochi,Kerala       | F    | 40000.00 | 1234567   |   5 |
+| Rahul       | K     | Singh           | 3456789 | 1997-06-12 | Chandigarh         | M    | 35000.00 | 5261423   |   2 |
+| Paul        | K     | Jacob           | 4567890 | 1998-03-15 | Pondichery         | M    | 30000.00 | 3456789   |   2 |
+| Karthikeyan |       | Selvakumaran    | 5261423 | 1998-05-17 | Adambakkam,Chennai | M    | 60000.00 | 5261423   |   1 |
++-------------+-------+-----------------+---------+------------+--------------------+------+----------+-----------+-----+
+5 rows in set (0.00 sec)
+
+36
+
+mysql> select * from Employee order by Ssn desc limit 5;
++----------+-------+--------------+---------+------------+----------+------+----------+-----------+-----+
+| Fname    | Minit | Lname        | Ssn     | Bdate      | Address  | Sex  | Salary   | Super_ssn | Dno |
++----------+-------+--------------+---------+------------+----------+------+----------+-----------+-----+
+| Aditya   | V     | Chopra       | 9012345 | 1998-08-12 | Kolkata  | M    | 25000.00 | 2345678   |   5 |
+| Aditi    | M     | Kumar        | 8901234 | 1998-04-05 | Mumbai   | F    | 30000.00 | 7890123   |   4 |
+| Himanshu |       | Giri         | 7890123 | 1998-08-09 | Varanasi | M    | 30000.00 | 6789012   |   4 |
+| Rajesh   | L     | Khanna       | 6789012 | 1998-05-12 | Mumbai   | M    | 35000.00 | 5678901   |   3 |
+| Andrew   | E     | Silberschatz | 5678901 | 1998-01-19 | Germany  | M    | 40000.00 | 5261423   |   3 |
++----------+-------+--------------+---------+------------+----------+------+----------+-----------+-----+
+5 rows in set (0.00 sec)
+
+37
+
+mysql> SELECT * FROM Employee WHERE Fname REGEXP '^[0-9]+$';
++-------+-------+-------+-----+------------+-----------+------+--------+-----------+-----+
+| Fname | Minit | Lname | Ssn | Bdate      | Address   | Sex  | Salary | Super_ssn | Dno |
++-------+-------+-------+-----+------------+-----------+------+--------+-----------+-----+
+| 123   | 3     | 456   | 0   | 1990-09-09 | Somewhere | M    |   0.00 | 1234567   |   1 |
++-------+-------+-------+-----+------------+-----------+------+--------+-----------+-----+
+1 row in set (0.00 sec)
+
+38
+
+39 
+
+mysql> create table EmpTem like Employee;
+Query OK, 0 rows affected (0.02 sec)
+
+40
+
+mysql> select * from Employee UNION select * from temp;
++-------------+-------+-----------------+---------+------------+--------------------+------+----------+-----------+-----+
+| Fname       | Minit | Lname           | Ssn     | Bdate      | Address            | Sex  | Salary   | Super_ssn | Dno |
++-------------+-------+-----------------+---------+------------+--------------------+------+----------+-----------+-----+
+| 123         | 3     | 456             | 0       | 1990-09-09 | Somewhere          | M    |     0.00 | 1234567   |   1 |
+| Abdul       |       | Kalam           | 1234567 | 1931-10-15 | Rameswaram         | M    | 50000.00 | 1234567   |   1 |
+| Lakshmi     | O     | Sivaramakrishna | 2345678 | 1996-04-14 | Kochi,Kerala       | F    | 40000.00 | 1234567   |   5 |
+| Rahul       | K     | Singh           | 3456789 | 1997-06-12 | Chandigarh         | M    | 35000.00 | 5261423   |   2 |
+| Paul        | K     | Jacob           | 4567890 | 1998-03-15 | Pondichery         | M    | 30000.00 | 3456789   |   2 |
+| Karthikeyan |       | Selvakumaran    | 5261423 | 1998-05-17 | Adambakkam,Chennai | M    | 60000.00 | 5261423   |   1 |
+| Andrew      | E     | Silberschatz    | 5678901 | 1998-01-19 | Germany            | M    | 40000.00 | 5261423   |   3 |
+| Rajesh      | L     | Khanna          | 6789012 | 1998-05-12 | Mumbai             | M    | 35000.00 | 5678901   |   3 |
+| Himanshu    |       | Giri            | 7890123 | 1998-08-09 | Varanasi           | M    | 30000.00 | 6789012   |   4 |
+| Aditi       | M     | Kumar           | 8901234 | 1998-04-05 | Mumbai             | F    | 30000.00 | 7890123   |   4 |
+| Aditya      | V     | Chopra          | 9012345 | 1998-08-12 | Kolkata            | M    | 25000.00 | 2345678   |   5 |
++-------------+-------+-----------------+---------+------------+--------------------+------+----------+-----------+-----+
+11 rows in set (0.00 sec)
+
+41
+
+mysql> select * from Employee where Ssn in (select Ssn from temp);
++-------------+-------+-----------------+---------+------------+--------------------+------+----------+-----------+-----+
+| Fname       | Minit | Lname           | Ssn     | Bdate      | Address            | Sex  | Salary   | Super_ssn | Dno |
++-------------+-------+-----------------+---------+------------+--------------------+------+----------+-----------+-----+
+| 123         | 3     | 456             | 0       | 1990-09-09 | Somewhere          | M    |     0.00 | 1234567   |   1 |
+| Lakshmi     | O     | Sivaramakrishna | 2345678 | 1996-04-14 | Kochi,Kerala       | F    | 40000.00 | 1234567   |   5 |
+| Rahul       | K     | Singh           | 3456789 | 1997-06-12 | Chandigarh         | M    | 35000.00 | 5261423   |   2 |
+| Paul        | K     | Jacob           | 4567890 | 1998-03-15 | Pondichery         | M    | 30000.00 | 3456789   |   2 |
+| Karthikeyan |       | Selvakumaran    | 5261423 | 1998-05-17 | Adambakkam,Chennai | M    | 60000.00 | 5261423   |   1 |
+| Rajesh      | L     | Khanna          | 6789012 | 1998-05-12 | Mumbai             | M    | 35000.00 | 5678901   |   3 |
+| Himanshu    |       | Giri            | 7890123 | 1998-08-09 | Varanasi           | M    | 30000.00 | 6789012   |   4 |
++-------------+-------+-----------------+---------+------------+--------------------+------+----------+-----------+-----+
+7 rows in set (0.01 sec)
+
+42
+
+mysql> select * from Employee where Ssn not in (select Ssn from temp);
++--------+-------+--------------+---------+------------+------------+------+----------+-----------+-----+
+| Fname  | Minit | Lname        | Ssn     | Bdate      | Address    | Sex  | Salary   | Super_ssn | Dno |
++--------+-------+--------------+---------+------------+------------+------+----------+-----------+-----+
+| Abdul  |       | Kalam        | 1234567 | 1931-10-15 | Rameswaram | M    | 50000.00 | 1234567   |   1 |
+| Andrew | E     | Silberschatz | 5678901 | 1998-01-19 | Germany    | M    | 40000.00 | 5261423   |   3 |
+| Aditi  | M     | Kumar        | 8901234 | 1998-04-05 | Mumbai     | F    | 30000.00 | 7890123   |   4 |
+| Aditya | V     | Chopra       | 9012345 | 1998-08-12 | Kolkata    | M    | 25000.00 | 2345678   |   5 |
++--------+-------+--------------+---------+------------+------------+------+----------+-----------+-----+
+4 rows in set (0.00 sec)
+
+43
+
+mysql> select DATABASE();
++------------+
+| DATABASE() |
++------------+
+| Employee   |
++------------+
+1 row in set (0.00 sec)
+
+44
+
+mysql> select @@hostname ;
++----------------+
+| @@hostname     |
++----------------+
+| karthik-laptop |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> select host from information_schema.processlist;
++-----------+
+| host      |
++-----------+
+| localhost |
++-----------+
+1 row in set (0.00 sec)
+
+45
+
+mysql> select version();
++-------------------------+
+| version()               |
++-------------------------+
+| 5.5.59-0ubuntu0.14.04.1 |1 h
++-------------------------+
+1 row in set (0.00 sec)
+
+46
+
+mysql> mysql> select 1|0;
++-----+
+| 1|0 |
++-----+
+|   1 |
++-----+
+1 row in set (0.00 sec)
+
+mysql> select 1&0;
++-----+
+| 1&0 |
++-----+
+|   0 |
++-----+
+1 row in set (0.00 sec)
+
+mysql> select 1^0;
++-----+
+| 1^0 |
++-----+
+|   1 |
++-----+
+1 row in set (0.00 sec)
+
+47
+
+48
+
+mysql> select datediff("2017-02-03","2017-01-01");
++-------------------------------------+
+| datediff("2017-02-03","2017-01-01") |
++-------------------------------------+
+|                                  33 |
++-------------------------------------+
+1 row in set (0.00 sec)
+
+49
+
+mysql> select now() + INTERVAL 1 Day;
++------------------------+
+| now() + INTERVAL 1 Day |
++------------------------+
+| 2018-04-03 15:20:15    |
++------------------------+
+1 row in set (0.00 sec)
+
+50
+
+mysql> select now() + INTERVAL 5000 minute + INTERVAL 2 hour;
++------------------------------------------------+
+| now() + INTERVAL 5000 minute + INTERVAL 2 hour |
++------------------------------------------------+
+| 2018-04-06 04:45:01                            |
++------------------------------------------------+
+1 row in set (0.00 sec)
+
+51
+
+mysql> select floor(3.14) , ceil(3.14) , pow(2,4) , log(2,16) , mod(10,4) , round(135.375,2) , truncate(135.375,2);
++-------------+------------+----------+-----------+-----------+------------------+---------------------+
+| floor(3.14) | ceil(3.14) | pow(2,4) | log(2,16) | mod(10,4) | round(135.375,2) | truncate(135.375,2) |
++-------------+------------+----------+-----------+-----------+------------------+---------------------+
+|           3 |          4 |       16 |         4 |         2 |           135.38 |              135.37 |
++-------------+------------+----------+-----------+-----------+------------------+---------------------+
+1 row in set (0.00 sec)
+
+52
+
+53
+
+mysql> select if(strcmp("Karthik","Karthik") = 0 ,"Yes","No");
++-------------------------------------------------+
+| if(strcmp("Karthik","Karthik") = 0 ,"Yes","No") |
++-------------------------------------------------+
+| Yes                                             |
++-------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select if(strcmp("Karthik","Karthike") = 0 ,"Yes","No");
++--------------------------------------------------+
+| if(strcmp("Karthik","Karthike") = 0 ,"Yes","No") |
++--------------------------------------------------+
+| No                                               |
++--------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select if(strcmp("Karthike","Karthik") = 0 ,"Yes","No");
++--------------------------------------------------+
+| if(strcmp("Karthike","Karthik") = 0 ,"Yes","No") |
++--------------------------------------------------+
+| No                                               |
++--------------------------------------------------+
+1 row in set (0.00 sec)
+
+54
+
+55
+
+mysql> select IFNULL("Yes",ACOS(2));
++-----------------------+
+| IFNULL("Yes",ACOS(2)) |
++-----------------------+
+| Yes                   |
++-----------------------+
+1 row in set (0.00 sec)
+
+56
+
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'karthikeyan'@'localhost' IDENTIFIED BY '123';
+Query OK, 0 rows affected (0.00 sec)
+
+
+
+
